@@ -1,0 +1,32 @@
+﻿@model MyMvcApp.Models.Payment
+@{
+    ViewBag.Title = "Payment Details";
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+}
+
+@section topbar {
+    <h1 class="h3 mb-0 text-gray-800">Payment Details</h1>
+}
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Order Number</dt>
+            <dd class="col-sm-9">@Model.Order?.OrderNumber ?? "-"</dd>
+
+            <dt class="col-sm-3">Amount</dt>
+            <dd class="col-sm-9">@Model.Amount.ToString("C")</dd>
+
+            <dt class="col-sm-3">Payment Date</dt>
+            <dd class="col-sm-9">@Model.PaymentDate.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Payment Method</dt>
+            <dd class="col-sm-9">@Model.PaymentMethod</dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+        </dl>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    </div>
+</div>

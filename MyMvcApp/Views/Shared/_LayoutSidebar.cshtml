@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewBag.Title</title>
+    <!-- Custom fonts for this template-->
+    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+    @RenderSection("styles", required: false)
+</head>
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <!-- Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+                <div class="sidebar-brand-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">ZeroTraceDev Tracking Panel</div>
+            </a>
+            <hr class="sidebar-divider my-0">
+
+            <!-- Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index", "Admin")">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading">Operations</div>
+
+            <!-- Products -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts"
+                   aria-expanded="false" aria-controls="collapseProducts">
+                    <i class="fas fa-box"></i>
+                    <span>Products</span>
+                </a>
+                <div id="collapseProducts" class="collapse" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Product Workflow</h6>
+                        <a class="collapse-item" href="@Url.Action("Index", "Products")">All Products</a>
+                        <a class="collapse-item" href="@Url.Action("Create", "Products")">New Product</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Orders -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrders"
+                   aria-expanded="false" aria-controls="collapseOrders">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Orders</span>
+                </a>
+                <div id="collapseOrders" class="collapse" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Order Workflow</h6>
+                        <a class="collapse-item" href="@Url.Action("Index", "Orders")">All Orders</a>
+                        <a class="collapse-item" href="@Url.Action("NewOrder", "Orders")">New Order</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Stock -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseStock"
+                   aria-expanded="false" aria-controls="collapseStock">
+                    <i class="fas fa-boxes"></i>
+                    <span>Stock</span>
+                </a>
+                <div id="collapseStock" class="collapse" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Inventory</h6>
+                        <a class="collapse-item" href="@Url.Action("CurrentInventory", "Stock")">Current Inventory</a>
+                        <a class="collapse-item" href="@Url.Action("AddProductStock", "Stock")">Add Product / Stock</a>
+                        <a class="collapse-item" href="@Url.Action("LowStockAlerts", "Stock")">Low Stock Alerts</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Payments -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePayments"
+                   aria-expanded="false" aria-controls="collapsePayments">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Payments</span>
+                </a>
+                <div id="collapsePayments" class="collapse" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Payment Status</h6>
+                        <a class="collapse-item" href="@Url.Action("Index", "Payments")">All Payments</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Cargo Tracking Will be added soon -->
+            @* <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index", "CargoTracking")">
+                    <i class="fas fa-truck-moving"></i>
+                    <span>Cargo Tracking</span>
+                </a>
+            </li> *@
+
+            <!-- Customers -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCustomers"
+                   aria-expanded="false" aria-controls="collapseCustomers">
+                    <i class="fas fa-user-friends"></i>
+                    <span>Customers</span>
+                </a>
+                <div id="collapseCustomers" class="collapse" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Customer Base</h6>
+                        <a class="collapse-item" href="@Url.Action("Index", "Customers")">All Customers</a>
+                        <a class="collapse-item" href="@Url.Action("Create", "Customers")">Add Customer</a>
+                        @* <a class="collapse-item" href="@Url.Action("GroupsSegments", "Customers")">Groups / Segments</a> *@
+                    </div>
+                </div>
+            </li>
+
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading">Reports & Settings</div>
+
+            <!-- Reports -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReports"
+                   aria-expanded="false" aria-controls="collapseReports">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Reports</span>
+                </a>
+                <div id="collapseReports" class="collapse" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Analytics</h6>
+                        <a class="collapse-item" href="/Reports/Sales">Sales</a>
+                        <a class="collapse-item" href="/Reports/Inventory">Inventory</a>
+                        <a class="collapse-item" href="/Reports/Customers">Customers</a>
+                        <a class="collapse-item" href="/Reports/Financial">Financial</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Logs -->
+            <li class="nav-item">
+                <a class="nav-link" href="/Logs">
+                    <i class="fas fa-file-alt"></i>
+                    <span>System Logs</span>
+                </a>
+            </li>
+
+            <!-- Settings -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSettings"
+                   aria-expanded="false" aria-controls="collapseSettings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+                <div id="collapseSettings" class="collapse" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Configuration</h6>
+                        <a class="collapse-item" href="/Settings/General">General</a>
+                        <a class="collapse-item" href="/Settings/Users">Users & Roles</a>
+                        <a class="collapse-item" href="/Settings/Integrations">Integrations</a>
+                    </div>
+                </div>
+            </li>
+
+            <hr class="sidebar-divider d-none d-md-block">
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    @RenderSection("topbar", required: false)
+                </nav>
+
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-dark">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto text-white">
+                        <span>&copy; ZeroTraceDev 2025 - All Rights Reserved</span>
+                    </div>
+                    <div class="social-icons text-center">
+                        <a href="#" class="text-white mx-2" title="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-white mx-2" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-white mx-2" title="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="/Account/Login">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="~/js/sb-admin-2.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

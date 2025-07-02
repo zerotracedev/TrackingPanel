@@ -1,0 +1,183 @@
+﻿@model MyMvcApp.ViewModels.OrderCreateViewModel
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+@{
+    ViewBag.Title = Model.Id > 0 ? "Edit Order" : "New Order";
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+}
+
+@section topbar {
+    <h1 class="h3 mb-0 text-gray-800">@ViewBag.Title</h1>
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">@ViewBag.Title</h6>
+        <a asp-action="Index" class="btn btn-sm btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" method="post" id="orderForm">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Customer</label>
+                    <select asp-for="CustomerID" class="form-control" required>
+                        <option value="">Select</option>
+                        @foreach (var customer in Model.Customers)
+                        {
+                            if (customer.CustomerID == Model.CustomerID)
+                            {
+                                <option value="@customer.CustomerID" selected>
+                                    @customer.FirstName @customer.LastName
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@customer.CustomerID">
+                                    @customer.FirstName @customer.LastName
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="OrderDate"></label>
+                    <input asp-for="OrderDate" type="date" class="form-control" required />
+                    <span asp-validation-for="OrderDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <label>Products</label>
+                <table class="table table-bordered table-sm" id="itemsTable">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Items.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <select name="Items[@i].ProductID" class="form-control item-product" required onchange="updateUnitPrice(this, @i)">
+                                        <option value="">Select</option>
+                                        @foreach (var p in Model.Items[i].Products)
+                                        {
+                                            if (p.ProductID == Model.Items[i].ProductID)
+                                            {
+                                                <option value="@p.ProductID" data-price="@p.Price" selected>@p.ProductName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@p.ProductID" data-price="@p.Price">@p.ProductName</option>
+                                            }
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <input name="Items[@i].Quantity" type="number" class="form-control item-qty" value="@Model.Items[i].Quantity" min="1" required oninput="calculateRowTotal(@i)" />
+                                </td>
+                                <td>
+                                    <input name="Items[@i].UnitPrice" type="text" class="form-control item-unitprice" value="@Model.Items[i].UnitPrice" readonly />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control item-rowtotal" readonly />
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-info btn-sm" onclick="addRow()">+ Add Product</button>
+            </div>
+
+            <div class="form-group mt-3">
+                <label asp-for="ShippingAddress"></label>
+                <textarea asp-for="ShippingAddress" class="form-control" rows="2"></textarea>
+            </div>
+
+            <div class="form-group text-right">
+                <label>Total Amount:</label>
+                <input type="text" id="totalAmount" name="TotalAmount" class="form-control d-inline-block" style="width:150px" value="@Model.TotalAmount" readonly />
+            </div>
+
+            <div class="text-right">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i> @(Model.Id > 0 ? "Update" : "Create")
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function calculateRowTotal(idx) {
+            var row = document.querySelectorAll("#itemsTable tbody tr")[idx];
+            var qty = parseFloat(row.querySelector(".item-qty").value) || 0;
+            var unitPrice = parseFloat(row.querySelector(".item-unitprice").value) || 0;
+            var rowTotal = qty * unitPrice;
+            row.querySelector(".item-rowtotal").value = rowTotal.toFixed(2);
+            calculateTotal();
+        }
+        function calculateTotal() {
+            var total = 0;
+            document.querySelectorAll(".item-rowtotal").forEach(function (el) {
+                total += parseFloat(el.value) || 0;
+            });
+            document.getElementById("totalAmount").value = total.toFixed(2);
+        }
+        function updateUnitPrice(sel, idx) {
+            var price = sel.options[sel.selectedIndex].getAttribute("data-price") || 0;
+            var row = document.querySelectorAll("#itemsTable tbody tr")[idx];
+            row.querySelector(".item-unitprice").value = price;
+            calculateRowTotal(idx);
+        }
+        function removeRow(btn) {
+            var row = btn.closest("tr");
+            row.parentNode.removeChild(row);
+            calculateTotal();
+        }
+        function addRow() {
+            var table = document.getElementById("itemsTable").getElementsByTagName('tbody')[0];
+            var idx = table.rows.length;
+            var html = `
+                <tr>
+                    <td>
+                        <select name="Items[${idx}].ProductID" class="form-control item-product" required onchange="updateUnitPrice(this, ${idx})">
+                            <option value="">Select</option>
+                            @foreach (var p in Model.Items[0].Products)
+                            {
+                                <option value="@p.ProductID" data-price="@p.Price">@p.ProductName</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <input name="Items[${idx}].Quantity" type="number" class="form-control item-qty" value="1" min="1" required oninput="calculateRowTotal(${idx})" />
+                    </td>
+                    <td>
+                        <input name="Items[${idx}].UnitPrice" type="text" class="form-control item-unitprice" value="0" readonly />
+                    </td>
+                    <td>
+                        <input type="text" class="form-control item-rowtotal" readonly />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">Delete</button>
+                    </td>
+                </tr>`;
+            table.insertAdjacentHTML('beforeend', html);
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll("#itemsTable tbody tr").forEach(function (row, idx) {
+                calculateRowTotal(idx);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,199 @@
+﻿@model IEnumerable<MyMvcApp.Models.Product>
+
+@{
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+    ViewData["Title"] = "Products";
+}
+
+@section topbar {
+    <h1 class="h3 mb-4 fw-bold">Product Management</h1>
+}
+
+<!-- Summary Boxes -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card bg-light shadow-sm border-start border-4 border-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted text-uppercase">Total Products</h6>
+                        <h3 class="fw-bold">@Model.Count()</h3>
+                    </div>
+                    <i class="fas fa-boxes fa-2x text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card bg-light shadow-sm border-start border-4 border-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted text-uppercase">Total Stock</h6>
+                        <h3 class="fw-bold">@Model.Sum(p => p.StockQuantity)</h3>
+                    </div>
+                    <i class="fas fa-warehouse fa-2x text-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card bg-light shadow-sm border-start border-4 border-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted text-uppercase">Discounted Products</h6>
+                        <h3 class="fw-bold">@Model.Count(p => p.Discount.HasValue && p.Discount.Value > 0)</h3>
+                    </div>
+                    <i class="fas fa-tags fa-2x text-warning"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stylish Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="h5 fw-bold text-dark">Product Overview</h2>
+        <p class="text-muted mb-0">List of all products available in the system.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-success btn-lg shadow-sm px-4">
+        <i class="fas fa-plus me-2"></i> Add New Product
+    </a>
+</div>
+
+
+<!-- FILTER FORM -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body py-4">
+        <form method="get">
+            <div class="row g-3 align-items-end">
+                <!-- Product Name -->
+                <div class="col-md-4">
+                    <label for="searchName" class="form-label fw-semibold text-secondary">Product Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-primary">
+                            <i class="fas fa-box-open"></i>
+                        </span>
+                        <input id="searchName" type="text" name="searchName"
+                            value="@(Context.Request.Query["searchName"])" class="form-control"
+                            placeholder="Search by product name">
+                    </div>
+                </div>
+
+                <!-- Category -->
+                <div class="col-md-3">
+                    <label for="category" class="form-label fw-semibold text-secondary">Category</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-primary">
+                            <i class="fas fa-list"></i>
+                        </span>
+                        <input id="category" type="text" name="category"
+                            value="@(Context.Request.Query["category"])" class="form-control"
+                            placeholder="Category name">
+                    </div>
+                </div>
+
+                <!-- Discount -->
+                <div class="col-md-3">
+                    <label for="hasDiscount" class="form-label fw-semibold text-secondary">Discount Filter</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-primary">
+                            <i class="fas fa-tags"></i>
+                        </span>
+                        <select id="hasDiscount" name="hasDiscount" class="form-select">
+                            <option value="">-- Select Discount --</option>
+                            <option value="true" selected="@(Context.Request.Query["hasDiscount"] == "true" ? "selected" : null)">With Discount</option>
+                            <option value="false" selected="@(Context.Request.Query["hasDiscount"] == "false" ? "selected" : null)">No Discount</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg d-flex justify-content-center align-items-center gap-2">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- TABLE -->
+<div class="card shadow border-0 mb-5">
+    <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 text-primary">Products</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped align-middle mb-0">
+                <thead class="table-light text-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Discount</th>
+                        <th>Stock</th>
+                        <th>Category</th>
+                        <th>Image</th>
+                        <th class="text-center" style="width:180px">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var p in Model)
+                        {
+                            <tr>
+                                <td>@p.ProductID</td>
+                                <td>@p.ProductName</td>
+                                <td>@p.Price.ToString("C")</td>
+                                <td>@(p.Discount.HasValue ? $"%{p.Discount}" : "-")</td>
+                                <td>@p.StockQuantity</td>
+                                <td>@p.Category</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(p.ImageUrl))
+                                    {
+                                        <img src="@p.ImageUrl" alt="Image" class="img-thumbnail" style="width:60px; height:auto;" />
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No image</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group" aria-label="Actions">
+                                        <a asp-action="Details" asp-route-id="@p.ProductID" class="btn btn-outline-info btn-sm" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@p.ProductID" class="btn btn-outline-warning btn-sm" title="Edit Product">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form asp-action="Delete" asp-route-id="@p.ProductID" method="post" class="d-inline" onsubmit="return confirm('Delete this product?');">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete Product">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center text-muted py-4">
+                                <i class="fas fa-box-open fa-lg me-2"></i> No products found.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

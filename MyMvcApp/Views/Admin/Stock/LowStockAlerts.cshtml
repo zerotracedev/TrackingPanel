@@ -1,0 +1,41 @@
+﻿@model IEnumerable<MyMvcApp.Models.Product>
+
+@{
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+    ViewData["Title"] = "Low Stock Alerts";
+}
+
+<h2>Low Stock Alerts (Stock &lt; 10)</h2>
+
+@if (Model.Any())
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Name</th>
+                <th>Stock Quantity</th>
+                <th>Price</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.ProductID</td>
+                    <td>@p.ProductName</td>
+                    <td>@p.StockQuantity</td>
+                    <td>@p.Price.ToString("C")</td>
+                    <td>@p.Category</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-success">
+        All products have sufficient stock.
+    </div>
+}

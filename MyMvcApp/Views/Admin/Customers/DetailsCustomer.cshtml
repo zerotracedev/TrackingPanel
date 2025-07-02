@@ -1,0 +1,39 @@
+﻿@model MyMvcApp.Models.Customer
+@{
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+    ViewData["Title"] = "Customer Details";
+}
+
+<h1 class="h4 mb-3 text-gray-800">Customer Details</h1>
+
+<div class="card shadow">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Full Name</dt>
+            <dd class="col-sm-9">@Model.FirstName @Model.LastName</dd>
+
+            <dt class="col-sm-3">Gender</dt>
+            <dd class="col-sm-9">@Model.Gender</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Phone</dt>
+            <dd class="col-sm-9">@Model.PhoneNumber</dd>
+
+            <dt class="col-sm-3">Address</dt>
+            <dd class="col-sm-9">@Model.Address</dd>
+
+            <dt class="col-sm-3">City</dt>
+            <dd class="col-sm-9">@Model.City</dd>
+
+            <dt class="col-sm-3">Postal Code</dt>
+            <dd class="col-sm-9">@Model.PostalCode</dd>
+
+            <dt class="col-sm-3">Registered</dt>
+            <dd class="col-sm-9">@Model.RegistrationDate.ToString("dd MMM yyyy")</dd>
+        </dl>
+        <a asp-action="Edit" asp-route-id="@Model.CustomerID" class="btn btn-warning">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

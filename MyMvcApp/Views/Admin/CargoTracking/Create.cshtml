@@ -1,0 +1,53 @@
+﻿@model MyMvcApp.Models.CargoTracking
+
+@{
+    ViewData["Title"] = "Add Cargo Tracking";
+    var ordersList = new SelectList((IEnumerable<MyMvcApp.Models.Order>)ViewBag.Orders, "Id", "OrderNumber");
+}
+
+<h2>Add Cargo Tracking</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="OrderId"></label>
+        <select asp-for="OrderId" class="form-control" asp-items="ordersList">
+            <option value="">-- Select Order --</option>
+        </select>
+        <span asp-validation-for="OrderId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TrackingNumber"></label>
+        <input asp-for="TrackingNumber" class="form-control" required />
+        <span asp-validation-for="TrackingNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <input asp-for="Status" class="form-control" required />
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LastUpdated"></label>
+        <input asp-for="LastUpdated" class="form-control" type="datetime-local"
+               value="@(Model.LastUpdated == default ? "" : Model.LastUpdated.ToString("yyyy-MM-ddTHH:mm"))" required />
+        <span asp-validation-for="LastUpdated" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

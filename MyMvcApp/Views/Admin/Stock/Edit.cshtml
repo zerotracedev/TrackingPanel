@@ -1,0 +1,68 @@
+﻿@model MyMvcApp.Models.Product
+
+@{
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+    ViewData["Title"] = "Edit Product";
+}
+
+@section topbar {
+    <h1 class="h3 mb-4 fw-bold">Edit Product</h1>
+}
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <form asp-action="Edit" asp-route-id="@Model.ProductID" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="ProductID" />
+
+            <div class="mb-3">
+                <label asp-for="ProductName" class="form-label"></label>
+                <input asp-for="ProductName" class="form-control" />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Price" class="form-label"></label>
+                <input asp-for="Price" class="form-control" type="number" step="0.01" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Discount" class="form-label"></label>
+                <input asp-for="Discount" class="form-control" type="number" step="0.01" min="0" max="1" />
+                <span asp-validation-for="Discount" class="text-danger"></span>
+                <small class="form-text text-muted">Enter discount as a decimal (e.g., 0.15 for 15%)</small>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="StockQuantity" class="form-label"></label>
+                <input asp-for="StockQuantity" class="form-control" type="number" min="0" />
+                <span asp-validation-for="StockQuantity" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Category" class="form-label"></label>
+                <input asp-for="Category" class="form-control" />
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save me-1"></i> Save Changes
+            </button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">
+                <i class="fas fa-arrow-left me-1"></i> Back to List
+            </a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,50 @@
+﻿@model MyMvcApp.Models.Product
+
+@{
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+    ViewData["Title"] = "Edit Product";
+}
+
+@section topbar {
+    <h1 class="h3 mb-0 text-gray-800">Edit Product</h1>
+}
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="ProductID" />
+            <div class="mb-3">
+                <label class="form-label">Product Name</label>
+                <input asp-for="ProductName" class="form-control" required />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Price</label>
+                <input asp-for="Price" class="form-control" required />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Discount</label>
+                <input asp-for="Discount" class="form-control" required />
+                <span asp-validation-for="Discount" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Stock Quantity</label>
+                <input asp-for="StockQuantity" class="form-control" required />
+                <span asp-validation-for="StockQuantity" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Category</label>
+                <input asp-for="Category" class="form-control" required />
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Image URL</label>
+                <input asp-for="ImageUrl" class="form-control" required />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

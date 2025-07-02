@@ -1,0 +1,139 @@
+﻿@model IEnumerable<MyMvcApp.Models.Customer>
+
+@{
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+}
+
+@section topbar {
+    <h1 class="h3 mb-4 fw-bold">Customer Management</h1>
+}
+
+<!-- Stylish Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="h5 fw-bold text-dark">Customer Overview</h2>
+        <p class="text-muted mb-0">List of all registered customers.</p>
+    </div>
+    <a asp-action="Create" class="btn btn-success btn-lg shadow-sm px-4">
+        <i class="fas fa-user-plus me-2"></i> Add Customer
+    </a>
+</div>
+
+<!-- Summary Boxes -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card bg-light shadow-sm border-start border-4 border-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted text-uppercase">Total Customers</h6>
+                        <h3 class="fw-bold">@Model.Count()</h3>
+                    </div>
+                    <i class="fas fa-users fa-2x text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card bg-light shadow-sm border-start border-4 border-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted text-uppercase">Male</h6>
+                        <h3 class="fw-bold">@Model.Count(c => c.Gender == "Male")</h3>
+                    </div>
+                    <i class="fas fa-mars fa-2x text-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card bg-light shadow-sm border-start border-4 border-danger">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted text-uppercase">Female</h6>
+                        <h3 class="fw-bold">@Model.Count(c => c.Gender == "Female")</h3>
+                    </div>
+                    <i class="fas fa-venus fa-2x text-danger"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TABLE -->
+<div class="card shadow border-0 mb-5">
+    <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 text-primary">Customers</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped align-middle mb-0">
+                <thead class="table-light text-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Gender</th>
+                        <th>Phone</th>
+                        <th>City</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        foreach (var c in Model)
+                        {
+                            <tr>
+                                <td>@c.CustomerID</td>
+                                <td><strong>@c.FirstName @c.LastName</strong></td>
+                                <td>@c.Email</td>
+                                <td>
+                                    <span class="badge bg-@(c.Gender == "Male" ? "primary" : "danger") text-white px-2 py-1 rounded-pill">
+                                        @if(c.Gender == "Male")
+                                        {
+                                            <i class="fas fa-mars me-1"></i>
+                                        }
+                                        else if(c.Gender == "Female")
+                                        {
+                                            <i class="fas fa-venus me-1"></i>
+                                        }
+                                        @c.Gender
+                                    </span>
+                                </td>
+                                <td>@c.PhoneNumber</td>
+                                <td>@c.City</td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@c.CustomerID" class="btn btn-outline-info btn-sm" title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@c.CustomerID" class="btn btn-outline-warning btn-sm" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form asp-action="Delete" asp-route-id="@c.CustomerID" method="post" class="d-inline"
+                                              onsubmit="return confirm('Are you sure you want to delete this customer?');">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="fas fa-user-slash fa-lg me-2"></i> No customers found.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Page Not Found</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card-container {
+            background-color: #1e1e1e;
+            padding: 3rem 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            transition: transform 0.3s ease;
+        }
+        .card-container:hover {
+            transform: scale(1.04);
+        }
+        .emoji {
+            font-size: 5rem;
+            user-select: none;
+            margin-bottom: 1rem;
+        }
+        h1 {
+            font-size: 2.8rem;
+            color: #ff5252;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        p {
+            font-size: 1.2rem;
+            color: #b0b0b0;
+            margin-bottom: 2rem;
+        }
+        .btn-primary {
+            background-color: #4caf50;
+            border: none;
+            padding: 0.75rem 2.5rem;
+            font-size: 1.1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+        }
+        .btn-primary:hover, 
+        .btn-primary:focus {
+            background-color: #66bb6a;
+            color: #fff;
+            text-decoration: none;
+            box-shadow: 0 6px 14px rgba(102, 187, 106, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container" role="main" aria-labelledby="errorTitle" aria-describedby="errorDesc">
+        <div class="emoji" aria-hidden="true">😕</div>
+        <h1 id="errorTitle">Oops!</h1>
+        <p id="errorDesc">The page you are looking for could not be found or you do not have access rights.</p>
+        <a href="/" class="btn btn-primary" role="button" aria-label="Return to Home Page">Return to Home</a>
+    </div>
+</body>
+</html>

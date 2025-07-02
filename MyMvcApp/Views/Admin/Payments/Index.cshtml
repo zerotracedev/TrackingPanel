@@ -1,0 +1,144 @@
+﻿@model MyMvcApp.Models.PaymentIndexViewModel
+
+@{
+    ViewBag.Title = "Payments";
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+}
+
+@section topbar {
+    <h1 class="h3 mb-4 fw-bold">Payment Management</h1>
+}
+
+<!-- Summary Boxes -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card bg-light shadow-sm border-start border-4 border-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted text-uppercase">Total Payments</h6>
+                        <h3 class="fw-bold">@Model.TotalCount</h3>
+                    </div>
+                    <i class="fas fa-credit-card fa-2x text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-light shadow-sm border-start border-4 border-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted text-uppercase">Completed</h6>
+                        <h3 class="fw-bold">@Model.CompletedCount</h3>
+                    </div>
+                    <i class="fas fa-check-circle fa-2x text-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-light shadow-sm border-start border-4 border-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted text-uppercase">Pending</h6>
+                        <h3 class="fw-bold">@Model.PendingCount</h3>
+                    </div>
+                    <i class="fas fa-hourglass-half fa-2x text-warning"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card bg-light shadow-sm border-start border-4 border-danger">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted text-uppercase">Failed</h6>
+                        <h3 class="fw-bold">@Model.FailedCount</h3>
+                    </div>
+                    <i class="fas fa-times-circle fa-2x text-danger"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stylish Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="h5 fw-bold text-dark">Payment Overview</h2>
+        <p class="text-muted mb-0">List of all payments made.</p>
+    </div>
+    <form asp-action="SyncPaymentsWithOrders" method="post">
+        <button type="submit" class="btn btn-outline-primary">
+            <i class="fas fa-sync me-1"></i> Sync Payments
+        </button>
+    </form>
+</div>
+
+<!-- TABLE -->
+<div class="card shadow border-0 mb-5">
+    <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 text-primary">Payments</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped align-middle mb-0">
+                <thead class="table-light text-dark">
+                    <tr>
+                        <th>Order No</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Payment Date</th>
+                        <th class="text-center" style="width:150px">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Payments != null && Model.Payments.Any())
+                    {
+                        foreach (var p in Model.Payments)
+                        {
+                            <tr>
+                                <td>@p.Order?.OrderNumber</td>
+                                <td>@p.Amount.ToString("C")</td>
+                                <td>
+                                    <span class="badge px-3 py-2 rounded-pill
+                                        @(p.Status == "Completed" ? "bg-success text-white" :
+                                          p.Status == "Failed" ? "bg-danger text-white" :
+                                          p.Status == "Pending" ? "bg-warning text-dark" :
+                                          "bg-secondary text-white")">
+                                        @p.Status
+                                    </span>
+                                </td>
+                                <td>@p.PaymentDate.ToString("dd/MM/yyyy")</td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@p.Id" class="btn btn-outline-info btn-sm" title="Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-outline-warning btn-sm" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                <i class="fas fa-credit-card fa-lg me-2"></i> No payments found.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,100 @@
+﻿@model MyMvcApp.Models.Payment
+
+@{
+    ViewBag.Title = "Edit Payment";
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+}
+
+@section topbar {
+    <h1 class="h3 mb-0 text-gray-800">Edit Payment</h1>
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(x => x.Errors))
+        {
+            <li>@error.ErrorMessage</li>
+        }
+        </ul>
+    </div>
+}
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="OrderId" />
+
+            <div class="row">
+                <div class="col-md-6">
+
+                    <div class="form-group mb-3">
+                        <label>Order Number</label>
+                        <input class="form-control" value="@Model.Order?.OrderNumber ?? "-"" readonly />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Amount"></label>
+                        <input asp-for="Amount" class="form-control" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="PaymentDate"></label>
+                        <input asp-for="PaymentDate" type="date" class="form-control" />
+                        <span asp-validation-for="PaymentDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="PaymentMethod"></label>
+                        <select asp-for="PaymentMethod" class="form-control">
+                            <option value="">-- Select Method --</option>
+                            @{
+                                var methods = new[] { "Credit Card", "Bank Transfer", "Cash", "Other" };
+                                foreach (var method in methods)
+                                {
+                                    <option value="@method" selected="@(Model.PaymentMethod == method ? "selected" : null)">@method</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Status"></label>
+                        <select asp-for="Status" class="form-control">
+                            <option value="">-- Select Status --</option>
+                            @{
+                                var statuses = new[] { "Pending", "Completed", "Failed" };
+                                foreach (var status in statuses)
+                                {
+                                    <option value="@status" selected="@(Model.Status == status ? "selected" : null)">@status</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-success mt-3">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary mt-3 ms-2">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                </div>
+            </div>
+        </form>
+
+        <form asp-action="SyncPaymentsWithOrders" method="post" class="mt-4">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-warning">Create Missing Payment Records</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
